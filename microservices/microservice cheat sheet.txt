@@ -1,0 +1,723 @@
+=============Spring Boot Microservices Level 1: Communication and Discovery=========================
+
+Monolithic
+it can be multiple code bases but what gets deployed ,can have multipel codebase
+is one entity
+it runs on one server
+it is scales as a single entity
+
+So some Monolithics can be same as Microservices
+BUT WHAT HAPPENS AT RUN TIME IS VERY DIFFERENT
+
+it effect 
+        how you think about your code
+        what are the other things happen around your code
+
+
+HERE WE WILL HAVE MICROSERVICS TALK TO EACH OTHER   
+
+Cohesion-In computer programming- cohesion refers to the degree to which the elements inside a module belong together.
+ In one sense, it is a measure of the strength of relationship between the methods and data of a class and some unifying purpose or concept served by that class.
+
+
+ Cohesion and Coupling-Coupling shows the relationships between modules. Cohesion shows the relationship within the module. Coupling shows the relative independence between the modules. 
+ Cohesion shows the module's relative functional strength. While creating, you should aim for low coupling, i.e., dependency among modules should be less.
+
+
+ SW with High cohesion has low coupling which is good-(Coupling and Cohesion in Software Engineering Tutorial | Cohesion and Coupling with Examples(youtube )
+)
+
+
+
+
+SPring cloud is ONE techonolgy you can do microservices
+
+
+2.Why so many technologies(2nd video)
+
+Software modularity is the decomposition of a program into smaller programs 
+with standardized interfaces
+
+Because of modularity
+we have address issues like
+                we have to make sure our release process is fine
+                we have make microservices scalable you can have multiple copies
+
+
+**Scalibility-Software scalability is an attribute of a tool or a system 
+                to increase its capacity and functionalities based on its users' demand.
+
+
+Advantage IN Microservices
+when we try to solve something in Monolithic system 
+e.g-how to call shopping cart service from Cateog service ,the problem is very Specific
+we are gone to have to sove this for our monolithics
+BUT when we break down to micro services thhese problems become generics
+e.g-Load balnacing is a generic problem
+when you break down to MS the individual service is doing what your application 
+is suppose to do but between MS thats a common probclem
+wheteher you need  to call shopping cart 
+built FB
+
+if it s a common problem there are Frameworks for it
+there are technologies to solve those problems
+
+
+Reagrdless of the aplication you can apply these solutions
+
+
+SOLUTIONS-load balncing,Eureka
+
+
+reference-MonovsMicro image
+
+
+
+3.Microservices vs service oriented architectures(video 3)
+
+Service discovery is a pattern
+which makes microservices work well together
+
+
+
+microservices and web services(SOA Service Oriented Architecture)
+
+when you are building a service to SOA you build the service for Reusability
+but you dont know where it will be used
+
+
+e.g-wheter or IPL web service
+
+when creating a SOA what they have in mind is a utility not an application
+"I dont know where it will be used and who ever wants to use it can use it"
+
+
+
+
+Microservices
+
+when you build  a service in microservices you kow that you service will be used in this particular
+application (e.g-for an e-commerce app)
+e.g-you break down e-commerce application to multiple services and knowing  very well that this MS willmight only
+be used in that application and You are OKAY with it!!
+it can or can not be used to external apps but its okay
+its not a requirment
+
+SOA is standerdize something might brak in futher
+but MS only used for that app
+  UI can alos be MS which consumes other MS 
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+  4. The application we'll be building
+
+  we will use spring cloud
+
+
+  we will have  3 MICROSERVICS and two of them will call the 3rd MS
+  and 3rd one would consolidate those data from 1st and 2nd and will retrun a reponse to you
+
+refernce -intital app architecture
+
+
+UI will be-the movie description and ID
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+05 Designing the sample microservices 
+
+1.Movie catalog Service
+    input:user ID
+    output:Movie list with details
+2.Movie Info Service
+     input:Movie ID
+    output:Movie Details
+3.Rating data Service
+     input:user ID
+    output:Movie list with details
+
+
+    refernce-MS architecture with input and output
+
+
+    Each service is a seperate MS project
+
+
+    MS is when services form a bigger than themself thing
+
+
+    $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4
+
+
+    6th video
+
+    just creat thee services
+
+
+
+
+
+
+
+    $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+    07 Building the Movie Catalog Service API
+
+
+    @SpringBootApplication-the main class,tell this is a spring boot app
+
+when runnning Tomcat server runs
+
+
+
+
+*@RestController-let know its a rest controler
+**RequestMapping("/catalog")//matches URL to class
+//after @RestController
+
+
+@RequestMapping("/{userId}")//matches URL to method
+//here {userId } is varible we pass
+
+
+@PathVarible- to pass varible we get from @RequestMapping to method 
+
+
+e.g-
+@RestController
+@RequestMapping("/catalog")
+public class MovieCatalgItem{
+
+@RequestMapping("/{userId}")
+public List<CatalogItem> getCatalog(@PathVarible("userId")String userId){
+  return Collection.singeltonList(
+    new CatalogItem("transformers")
+  )
+
+}
+
+}
+
+
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+08 Building the Movie Info Service API
+
+you can use different technologies to different MS as long as theey use REST
+
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+09 Configuring server port for microservices 
+
+
+in production icroservices will run ondifferent servers so we wont face this
+
+in application.properties
+
+server.port=8081
+
+
+in production you will run the jar file
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+10.Coding the third service and discussing communication
+
+
+
+HOW TO MAKE REST CALL FROM YOUR CODE?
+
+calling REST API programitically
+
+using REST client library
+deprecated wit web client(reactive programming,asynchronous )
+
+RestTemplate-a client already in our path
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+11 Using RestTemplate to call an external microservice API
+
+
+RestTemplate -the utility that lets us make the call
+
+RestTemplate restTemplate=new RestTemplate();
+//**Resttempalte has methods on it
+RestTemplate.getObject();
+//1st argument -URL
+//it returns a  String and it knows how to unmarshall it
+//if you know the payload you can create a class with same properties as the JSOn and RestTemplate can poupulate 
+//values to it and give
+
+//in different MS you can create the same model again to be independent of other MS
+
+
+
+restTemplate.getForObject("URL",movie.class)//movie.class is what it returns
+
+
+****When you have java to unmarshall something from another 
+    YOU HAVE TO PROVIDE AN EMPTY CONSTRUCTOR
+
+
+    e.g-in Movie class
+
+
+    public Movie(){
+
+    }
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+12 Using a Bean to create RestTemplate instance
+
+//hardcoding URL in RestTemplate is bad
+
+
+in MovieCatelogResource class's getCatelog() we create RestTemplate
+and when the method is done it is no more,every time we call the method
+we create a  RestTemplate for a fraction of second
+@RequestMapping("/{userId}")
+public List<CatalogItem> getCatalog(@PathVarible("userId")String userId){
+RestTemplate restTemplate=new RestTemplate();
+
+//so now we need to make it  creaet create one insstance of RestTemplate and use it for multiple MovieCatelogResource
+//how to make any object and shared across multiple classes ??YOU COULD MAKE A Bean
+//Beans are singelton by default
+
+
+so in @SpringBootApplication class (because it runs only once)
+//***IMPORTANT
+@SpringBootApplication
+public class RestTemplate getRestTemplate{
+@Bean
+public RestTemplate getRestTemplate(){
+    retrun new RestTemplate();
+}
+
+
+
+Now we have to autowire the Resttemplate bean where ever we want to use it
+
+in MovieCatelogResource.java 
+
+
+@Autowired
+private RestTemplate Resttempalte;
+
+
+
+A calss is a spring bean it self
+
+
+if we have bean of same type you get an error
+
+@Bean - PRODUCER
+@Autowire -CONSUMER
+
+
+
+RestTemplate is synchronised and blocking but 
+WebClient is asynchronous
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+13 Using WebClient to make API calls
+
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!SKIPPED FOR NOW!!!!!!!!!!!!!!
+
+
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+
+***Dont return a list from api just return an object property assigned
+
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+15.Why you should avoid returning lists in APIs 
+
+
+no one care if you add another property your json
+
+
+but if you cahnge a list to an object code will break in futher if you decide to cnvert it to an object
+
+
+search about parameterized types
+
+
+Here we are breaking our Rule byreturning a list
+
+
+reference -MS code 1 refer the code for better understanding
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+16 Audience questions on microservice communication 
+
+
+to use asynchronuse programming do use WebClient instead of Resttempalte and also dont use block()with webClient
+
+
+
+All RestTemplate care about is remote api returning a JSON it does not care if its implemented
+on Spring,etc.....
+
+
+
+we can handle security by
+1.using Https
+2.Using authentication(there are different levels of authentication in this)
+
+
+
+REFERNCE-MS code 1 (must refer so important)
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+17 Understanding Service Discovery
+
+
+What we do wrong
+
+        1.Hardcoding the url
+
+why hard coding bad
+        1.Load balancing
+      2.dynamic unmarshall3.multiple environments
+
+
+
+      Because of this WE have SERVICE DISCOVERY!!!!!!!!!!!!
+ IMPORTANT****************listen to what is service discovery otherwise  it will be verbose
+
+We provide a level of abstraction
+
+refrence-Service discovery 1
+
+
+Discovery server know where the services are
+
+1.CLIENT SIDE SERVICE DISCOVERY (TIME 4.50)
+
+CLIENT ASKS the "Discovery Server" and discover server tells client where the 
+particular service is then client will call the service
+
+
+
+2.SERVER SIDE SERVICE DISCOVERY
+client->Discovery server->service
+
+REFERENCE-server side service discovery
+
+
+
+Two service discovery
+1.CLIENT SIDE SERVICE DISCOVERY
+2.SERVER SIDE SERVICE DISCOVERY
+
+
+***************Spring cloud use client side discovery
+
+This all happens BTS with spring cloud
+
+with spring cloud you just need to put do some configurations and it will work
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+18 Introducing Eureka
+
+
+
+we talked about pattern(service discovery) and now the technology -Eureka
+(Eureka for finding)
+
+
+Netflix OSS
+Eureka is made thanks to Netflix
+Netflix one of the leaders Micro service libraries that made open source 
+Netflix libraries work well with Spring boot
+
+e.g-
+Eureka
+Ribbon
+Hysterix
+Zuul
+and lot more
+
+
+Spring build an abstraction that works well with libraries
+
+
+just like JPA abstraction we can use Hibernate or anyother technology
+
+yoy talk to spring boot spring boot talks to right technology
+
+
+
+we will use spring cloud and Eureka to discover service
+
+
+Eureka Client cando
+1.Tell Eureka server "hey! im here"(Client)
+2.Tell Eureka Server "I need this service "(Service)
+
+Steps to make it work
+
+1.Start up Eureka server
+
+2.Have microservice register (publish) using
+Eureka client
+
+3.Have microservices locate(consume) using Eureka client
+ 
+
+
+
+
+
+ $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+ 19 Starting a Eureka server
+
+To create a Eureka server you download a spring boot application
+we named it discovery-server)
+***What makes it a Eureka server is "Eureka server" library
+
+**there is another "Eureka Discovery" which is fo5r client
+
+in main aftre @SpringBootApplication use @EnableEurekaServer
+
+***we need add jaxb also otherwise we get errors
+
+
+when you start server you will see the Eureka UI
+there is a phone book
+
+We have to set the client only then services can tell they  are there
+
+reference-Eureka Server
+
+
+when staring Eureak server you will get bunch of errors to get rid of those 
+add propeties to application.properties
+To Eureak server to not to regeister it self
+Every Eureka server is an Eureak Client
+Not only multple instance of MS but multiple instances of Eureak servers we can have
+AND they can register with each Other also (eureak server) 
+so even if one service fails other service would work
+ there is a propety I can say to Eureks server to stop acting like a client
+
+
+ eureka.client.register-with-eureka=functionalities
+ eureka.client.fetch-registry=false
+
+
+we add those to stop howing errors if you dont its also fine it will still work
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+20 Creating Eureka clients
+
+
+Add the "Eureka Client" dependency to have  the 3 microservices register with Eureka
+
+spring-cloud-starter-netflix-eureka-client
+
+
+also add spring-cloud version
+
+why??by doing this other dependencies in spring cloud like eureka client,eureka server,et..
+we dont have to specify each ones version
+this would only affect spring cloud dependencies
+
+
+THIS IS THE FIRST STEP TOWARDS SPRING CLOUD
+add Eureka client
+
+
+add @EnableEurekaClient
+
+
+Spring cloud is the technology we use which is wrapped around by
+spring wrappers
+thats why we download those seperately
+
+
+
+TIP-Copy the pom xml from git and paste in code
+
+Now from server UI you can see a service named "UNKNOWN " is registered to server
+But we just added client depndency to services????
+
+Its "UNKNOWN" because we didnt set service name ,so in "MovieInfoService" application
+in application.properties set
+spring.application.name=movie-info-service
+
+
+
+Now in Eureak Server we can see "movie-info-service" instead of "UNKNOWN"
+
+
+
+HOW DID CLIENT FOUND EUREKA SERVER??HOW DID IT KNOW WHERE TO LOOK FOR??
+
+ANSWER-BECAuSE WE HAVE USED THE DEFAULT PORT,I OTHERWISE WE NEED TO LET IT KNOW
+THE PORT BY ADDING to application.propeties
+
+then add other client services as well to Eureka server
+****add @EnableEurekaClient
+name them in application.properties
+
+
+
+reference -Eureka server with 3 Services
+
+
+
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$4
+21 Discovering services through Eureka
+ 
+
+ Now we have registered services now we need to know how to CONSUME those  in our services
+
+
+"Hey Eureka Service give me this servicce"
+
+
+In our example Service Consuming happens in Movie-catalog-service
+
+
+The way to consumeservices involves another annotation
+
+library provides abstration the same way server side discovery proviide
+
+
+so use the annotation @LoadBalanced
+this is used with RestTemplate bean
+
+@Bean
+@LoadBalanced
+public RestTemplate getRestTemplate(){
+  return new RestTemplate()
+}
+
+
+@LoadBalanced- its say to RestTemplate the URL im giving is basically a hint to discover service 
+              not the actual service + bunch of other things
+
+              Now just by doing this RestTemplate will look for hints on what URLs to look for
+
+              rather than say "http://localhost:8082/movies/"
+
+              we have to give the names the Eureka server has given those
+
+              e.g-"http://rating-data-service/movies/"
+
+time 1.25 -listen
+
+
+library provids abstraction
+
+Now when we start this RestTemplate wiil take "rating-data-service" as a service name 
+calls Eureks server determine actual port and host and then the subsequent calls
+All this abstraction is hidden in library and makes it look like we are making a simple call
+
+***When we deploy it to production or QA still works fine(must have Eureka server there also)
+
+reference-MS CODE 2 WITH EUREKA
+
+
+
+
+
+$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+
+
+
+so after Eureak client gets service information by calliing Eureka server
+**there is a defult cache in Eurek client (read)
+
+
+the @LoadBalanced is because not only service discovery it does Load balancing also
+
+we can have multiple  instance of same servicebut what service get called is handle by @LoadBalanced
+it is handle by load balncing
+
+
+refernce-load balancing
+
+time 2.22 listen HOw to make multiple instances run
+
+
+refernce-multiple instance running
+
+
+but not effective load balancing(Not sure)
+()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@LoadBalanced-load balancing+ service discovery
+
+
+
+
+
+
+
+
+
+
+
+
+
+
