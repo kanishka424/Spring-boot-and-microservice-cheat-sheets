@@ -1,0 +1,45 @@
+spring tutorial -understanding the bean factory(3 video)
+
+Whole dependecy injection is possible because spring is  a CONTAINER
+OF BEANS/FACTORY OF BEANS
+
+
+CONTAINER-
+e.g- Tom cat container 
+    tom cat creats the servlet objects which requires to run 
+    an application
+    we proide an xml and it reads xml
+
+
+if you create object using "new" it wont be handle by spring
+
+
+SPRING USES "FACTORY PATTERN" TO CREATE BEANS
+
+
+
+writing code using the Bean Factory(4 video)
+
+
+reference -factory in spring
+
+
+
+Writing code using bean factory(4 video)
+
+
+we create DrawingApp.js(main class)
+we create Triangle.java class
+
+then at outside we create spring.xml-where xml configuration provides
+
+
+
+in DrawingApp.js
+BeanFactory factory=new XmlBeanFactory(new FileSystemResource("spring.xml"))
+Triangle triangle=("Triangle")factory.getBean("triange")//getBean() is the method to ask for an object,we should cast to Triangle beacuse getBean() returns an objectp]l
+
+triangle.draw()
+
+
+in 
